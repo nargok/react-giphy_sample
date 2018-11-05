@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import './index.css';
 
 import axios from 'axios';
+import { Search } from './components/Search';
 
 class App extends React.Component {
   constructor() {
@@ -16,13 +17,18 @@ class App extends React.Component {
 
   render () {
     console.log(this.state.gifUrlList);
-    return <div>{this.renderImageList(this.state.gifUrlList)}</div>
+    return (
+      <div>
+        <Search search={this.giphyApi} />
+        {this.renderImageList(this.state.gifUrlList)}
+      </div>
+    );
   }
 
-  giphyApi() {
-    const search = 'cat';
+  giphyApi = target =>  {
+    const search = target;
     const key = process.env.REACT_APP_GIPHY_TOKEN;
-    const limit = 3;
+    const limit = 10;
     
     const url = `https://api.giphy.com/v1/gifs/search?q=${search}&api_key=${key}&limit=${limit}`;
 
@@ -35,8 +41,8 @@ class App extends React.Component {
   }
 
   renderImageList(list) {
-    const imageList = list.map(url => {
-      return <li key={url}><img src={url} alt="cat" /></li>;
+    const imageList = list.map((url, index) => {
+      return <li key={url}><img src={url} alt={`giphyImage-${index}`} /></li>;
     });
 
     return <ul>{imageList}</ul>
