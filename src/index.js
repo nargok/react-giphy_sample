@@ -1,12 +1,38 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import axios from 'axios';
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = { gifUrlList: [] };
+  }
+
+  componentDidMount() {
+    this.giphyApi();
+  }
+
+  render () {
+    console.log(this.state.gifUrlList);
+    return <div>app</div>
+  }
+
+  giphyApi() {
+    const search = 'cat';
+    const key = process.env.REACT_APP_GIPHY_TOKEN;
+    const limit = 3;
+    
+    const url = `https://api.giphy.com/v1/gifs/search?q=${search}&api_key=${key}&limit=${limit}`;
+
+    axios.get(url).then(res => {
+      const data = res.data.data;
+
+      const imageUrlList = data.map(item => item.images.downsized.url);
+      this.setState({ gifUrlList: imageUrlList });    
+    });
+  }
+}
+
+render(<App />, document.getElementById('root'));
