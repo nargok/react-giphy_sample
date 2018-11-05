@@ -16,7 +16,7 @@ class App extends React.Component {
 
   render () {
     console.log(this.state.gifUrlList);
-    return <div>app</div>
+    return <div>{this.renderImageList(this.state.gifUrlList)}</div>
   }
 
   giphyApi() {
@@ -32,6 +32,14 @@ class App extends React.Component {
       const imageUrlList = data.map(item => item.images.downsized.url);
       this.setState({ gifUrlList: imageUrlList });    
     });
+  }
+
+  renderImageList(list) {
+    const imageList = list.map(url => {
+      return <li key={url}><img src={url} alt="cat" /></li>;
+    });
+
+    return <ul>{imageList}</ul>
   }
 }
 
